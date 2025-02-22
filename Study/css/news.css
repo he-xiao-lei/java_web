@@ -1,0 +1,15 @@
+/* 元素选择器 */
+span{
+  /* rgb表示法 */
+  color: rgba(178, 178, 178, 0.5);
+}       
+/* 类选择器 */
+.news{
+  color: green;
+  font-size: 12px;
+}
+/* id选择器 */
+#news{
+  color: red;
+  font-size: 12px;
+}

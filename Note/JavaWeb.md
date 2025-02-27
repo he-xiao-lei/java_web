@@ -442,3 +442,62 @@ html在渲染时，从上往下逐行解析展示的
 
 body标签自带的8px的外边距
 
+```java
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* body {
+            margin: 0;
+        } */
+
+        #container {
+            width: 500px;
+            height: 300px;
+            background-color: blue;
+            display: flex;
+            /* 弹性布局 */
+            flex-direction: row;
+            /* 垂直排列 */
+            justify-content: space-between;
+            /*解释justify-content每一个参数的含义*/
+            /* flex-start: 从容器的起始位置开始排列 */
+            /* flex-end: 从容器的结束位置开始排列 */
+            /* center: 居中排列 */
+            /* space-between: 均匀排列，第一个元素在容器的起始位置，最后一个元素在容器的结束位置 */
+            /* space-around: 均匀排列，每个元素周围都有相同的空间 */
+            /* space-evenly : 均匀排列，每个元素之间的空间相等 */
+
+        }
+
+        .box {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="container">
+        <div class="box">1</div>
+        <div class="box">2</div>
+        <div class="box">3</div>
+    </div>
+</body>
+```
+效果图
+![image](./picture/image.png)
+
+### HTML-CSS-常见标签和样式-表单标签
+
+
+
+![image1](./picture/image-1.png)

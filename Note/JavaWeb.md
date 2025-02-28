@@ -442,7 +442,7 @@ html在渲染时，从上往下逐行解析展示的
 
 body标签自带的8px的外边距
 
-```java
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -501,3 +501,112 @@ body标签自带的8px的外边距
 
 
 ![image1](./picture/image-1.png)
+
+
+- get:将表单数据拼接在url后面,不安全,但是可以被缓存(默认)*,例如: /save?name=zhangsan&age=18 */
+> 如果是隐私数据，就不推荐使用GET
+在浏览器中GET请求大小有限制,不适合大数据的表单
+
+- post:将表单数据放在请求体中,安全,但是不可以被缓存*/ 例如: /save -->
+> 如果是隐私数据，就推荐使用POST
+请求大小没有限制
+
+效果图:
+![alt text](image.png)
+代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- /*form表单元素*/
+    /*form表单元素的作用：收集用户输入的数据*/
+    /*form表单元素的属性：action,method,target*/
+    /*action:表单提交的地址*/ -->
+    <!-- /*method:表单提交的方式*/
+    /*get:将表单数据拼接在url后面,不安全,但是可以被缓存(默认)*,例如: /save?name=zhangsan&age=18 */
+    /*post:将表单数据放在请求体中,安全,但是不可以被缓存*/ 例如: /save -->
+    <!-- 表单项要能够采集数据，就要设置name属性,表示当前表单项的名字 -->
+    <form action="/save" method="post">
+        姓名: <input type="text" name="name">
+        年龄: <input type="number" name="age">
+        <input type="submit" value="提交">
+        
+    </form>
+</body>
+
+</html>
+```
+
+### HTML-CSS-常见标签和样式-表单项标签
+
+
+![image](./picture/image-3.png)
+
+代码:POST请求
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/save" method="post">
+        姓名: <input type="text" name="name"><br>
+
+        年龄: <input type="number" name="age"><br>
+
+        密码:
+        <input type="password" name="password"><br>
+        男<input type="radio" name="sex" value="male">
+        女<input type="radio" name="sex" value="female"><br>
+
+
+        选择学历:
+        <select name="select">
+            <option value="">-------------请选择-------------</option>
+            <option value="大学">大学</option>
+            <option value="中学">中学</option>
+            <option value="初中">初中</option>
+        </select><br>
+        爱好:
+        <input type="checkbox" name="hobby" value="Java">Java
+        <input type="checkbox" name="hobby" value="Python">Python
+        <input type="checkbox" name="hobby" value="跑步">跑步
+        <br>
+        个人简介:
+        <textarea name="desc" id="1" cols="4" rows="4"></textarea><br>
+        文件上传
+        <input type="file" name="file"><br>
+        时间:
+        <input type="date" name="date"><br>
+
+        <!-- 表单常见按钮 -->
+        <input type="submit" value="提交">
+        <input type="reset" value="重置">
+        <input type="button" value="按钮">
+
+
+
+
+    </form>
+</body>
+
+</html>
+```
+
+
+
+
+![image](./picture/image-4.png)

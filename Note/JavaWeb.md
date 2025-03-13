@@ -610,3 +610,13 @@ body标签自带的8px的外边距
 
 
 ![image](./picture/image-4.png)
+
+
+label标签
+> 可以让被标签包裹的字被点击时也选中，而不是必须要点击圆圈
+
+总结
+![image](./picture/image-5.png)
+
+
+### HTML-CSS-常见标签和样式-tlias案例-搜索表单区域

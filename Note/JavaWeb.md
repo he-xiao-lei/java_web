@@ -626,7 +626,7 @@ skip
 
 
 
-### JS-介绍
+## JS-介绍
 什么是 Javascript
 
 Web 标准也称网页标准，由一系列的标准组成，大部分由 W3C (WorldWideWebConsortium, 万维网联盟) 负责制定。
@@ -656,3 +656,153 @@ Javascript和Java是完全不同的语言,不论是概念还是概念还是设�
 
 
 
+1. JS 引入方式
+内部脚本：将 JS 代码定义在 HTML 页面的<script></script>中 (<:body> 的底部)
+外部脚本：将 JS 代码定义在 JS 文件中，通过 < scriptsrc=""></script>标签引入
+2. JS 书写规范
+结束符：每行结尾以分号结尾，结尾分号可有可无
+
+### JS 核心语法-变量&数据类型
+
+> JS 中用 let 关键字来声明变量 (弱类型语言，变量可以存存放不同类型的值)。
+变量名需要遵循如下规则:
+
+- 只能用字母、数字、下划线 (_)、美元符号 ($) 组成，且数字不能开头
+
+- 变量名严格区分大小写，如 name 和 Name 是不同的变量
+
+- 不能使用关键字，如:let、var、if、for 等
+
+JS 中用 const 关键字来声明常量。
+一旦声明，常量的值就不能改变 (不可以重新赋值)
+
+```javascript
+    // 1. 变量的声明
+    let a = 10;
+
+    let b = "HelloWorld";
+    //2.常量的声明
+    const PI = 3.14;
+    // PI = 12;
+    alert(b)//弹出窗口
+    console.log(PI)//输出到控制台
+    document.write("你好")//直接写在body区域
+```
+
+JavaScript 的数据类型分为：基本数据类型和引用数据类型 (对象)。
+基本数据类型:
+- number: 数字 (整数、小数、NaN (Not a Number))
+- boolean: 布尔。true,false
+- null: 对象为空。Javascript 是大小写敏感的，因此 null、Null、Nu11、NULL 是完全不同的
+- undefined: 当声明的变量未初始化时，该变量的默认值是 undefined
+-  string: 字符串，单引号、双引号、反引号皆可，推荐使用单引号
+
+使用typeof可以查看数据的类型
+```js
+typeof 变量
+```
+
+
+数据类型
+模板字符串语法:
+(反引号，英文输入模式下按键盘的 tab 键上方波浪线～那个个键
+内容拼接变量时，使用 ${} 包住变量
+```js
+let str = 'Fuck';
+console.log(`${str}you`)
+```
+
+ ### JS 核心语法-函数
+
+ ![image](./picture/image%20copy.png)
+
+![image](./picture/image%20copy%202.png)
+
+实例代码
+```js
+<script>
+    //1.函数的定义和调用
+    function add(a, b) {//-具名函数
+      return a + b;
+    }
+    let result = add(12, 10);
+    alert(result)
+
+
+    //2.1
+    //函数表达式
+    let func = function (a, b) {
+      return a * b;
+    }
+    //2.2
+    // 箭头函数
+    let a = (a, b) => {
+      return a + b;
+    }
+    alert(a(2, 3))
+  </script>
+
+```
+
+ ### JS-核心语法-自定义对象&JSON
+
+#### 自定义对象
+![image](./picture/image%20copy%203.png)
+
+调用方式:
+
+- 调用属性
+> 对象名.属性名;
+
+- 调用方法
+> 对象名.方法名
+
+注意尽量不要用箭头函数
+```js
+let user = {
+      name: 'hexiaolei',
+      age: 18,
+      address: '苏州',
+      say: function (str) {
+        alert(str);
+      },
+      //也可以
+      sayA(str2) {
+        alert(str2)
+      },
+      //在箭头函数中，this并不指向当前对象，指向的是当前元素的上级
+      sayB: () => {
+        alert(this + 'hello')
+      }
+    }
+    user.say('Hello');
+    user.sayA('helloAgain')
+    user.sayB()
+
+```
+因为`sayB`方法中的this,指向的是object window,而不是当前对象
+
+#### JSON
+
+概念:JavaScript Object Notation,JavaScript对象标记法(JS对象标记法书写的文本)
+
+由于语法简单，层次结构鲜明，所以常用于数据载体，在网络中进行传输
+
+
+
+JSON格式:`{key:value,key1:value,key2:value}`
+
+```js
+//讲js对象转化为字符串,JSON.stringify()
+    let user = {
+      name: 'hexiaolei',
+      age: '18',
+      addresss: '苏州',
+    }
+    //js->json
+    console.log(JSON.stringify(user))
+
+    //json->js
+    let jsonString = '{"name":"hexiaolei","age":18,"address":"Suzhou"}'
+    alert(JSON.parse(jsonString).name)
+```

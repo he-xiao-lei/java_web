@@ -1,15 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS-函数</title>
 </head>
+
 <body>
-  
+
 
   <script>
+    //1.函数的定义和调用
+    function add(a, b) {//-具名函数
+      return a + b;
+    }
+    let result = add(12, 10);
+    alert(result)
 
+
+    //2.1
+    //函数表达式
+    let func = function (a, b) {
+      return a * b;
+    }
+    //2.2
+    // 箭头函数
+    let a = (a, b) => {
+      return a + b;
+    }
+    alert(a(2, 3))
   </script>
 </body>
+
 </html>

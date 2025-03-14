@@ -1,15 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS-函数</title>
 </head>
+
 <body>
-  
+
 
   <script>
-   
+    // let user = {
+    //   name: 'hexiaolei',
+    //   age: 18,
+    //   address: '苏州',
+    //   say: function (str) {
+    //     alert(str);
+    //   },
+    //   //也可以
+    //   sayA(str2) {
+    //     alert(str2)
+    //   },
+    //   //在箭头函数中，this并不指向当前对象，指向的是当前元素的上级
+    //   sayB: () => {
+    //     alert(this + 'hello')
+    //   }
+    // }
+    // user.say('Hello');
+    // user.sayA('helloAgain')
+    // user.sayB()
+
+    //讲js对象转化为字符串,JSON.stringify()
+    let user = {
+      name: 'hexiaolei',
+      age: '18',
+      addresss: '苏州',
+    }
+    //js->json
+    console.log(JSON.stringify(user))
+
+    //json->js
+    let jsonString = '{"name":"hexiaolei","age":18,"address":"Suzhou"}'
+    alert(JSON.parse(jsonString).name)
   </script>
 </body>
+
 </html>

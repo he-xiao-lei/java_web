@@ -719,7 +719,7 @@ console.log(`${str}you`)
 ![image](./picture/image%20copy%202.png)
 
 实例代码
-```js
+```html
 <script>
     //1.函数的定义和调用
     function add(a, b) {//-具名函数
@@ -791,7 +791,7 @@ let user = {
 
 
 JSON格式:`{key:value,key1:value,key2:value}`
-
+z
 ```js
 //讲js对象转化为字符串,JSON.stringify()
     let user = {
@@ -806,3 +806,694 @@ JSON格式:`{key:value,key1:value,key2:value}`
     let jsonString = '{"name":"hexiaolei","age":18,"address":"Suzhou"}'
     alert(JSON.parse(jsonString).name)
 ```
+
+
+
+### JS-核心语法-DOM
+
+概念:Document Object Model,文档对象模型
+
+将标记语言的各个组成部分分装为对应的对象:
+- Document:整个文档对象
+- Element:元素对象
+- Attribute:属性对象
+- Text:文本对象
+- Cpmment:注释对象
+
+
+![image](./picture/image%20copy%204.png)
+
+JavaScritp通过DOM，可以对html进行以下更改
+- 改变html元素内容
+- 改变html元素样式(css)
+- 对html DOM时间做出反应
+- 添加或者删除html元素
+
+DOM操作核心思想: 将网页中所有元素当作对象处理，（标签的所有属性在该对象上都可以找到）
+
+操作步骤:
+- 获取要操作的DOM对象
+- 操作DOM对象的属性和方法
+
+获取DOM对象
+- 根据CSS选择器来选择DOM元素，获取匹配到的第一个元素:document.querySelector('选择器')
+- 根据CSS选择器来选择DOM元素，获取匹配到的第一个元素:document.querySelectorAll('选择器')//标签选择器span,类选择器.xxx,id选择器#xxx
+！！！：得到的是NodeList节点集合，是一个伪数组(有长度，有索引的数组)
+
+
+
+练习小代码
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS-DOM</title>
+</head>
+
+<body>
+
+  <h1 id="title1">11111</h1>
+  <h1>22222</h1>
+  <h1>33333</h1>
+
+  <script>
+    //修改第一个h1标签的内容
+
+    let h = document.querySelector('h1');
+    h.innerHTML = '48123428-1039';
+    // document.querySelectorAll('h1')[1].innerHTML = '555555';
+
+    let all = document.querySelectorAll('h1');
+
+    for (let i = 0; i < all.length; i++) {
+      all[i].innerHTML = '666666';
+    }
+
+  </script>
+</body>
+
+</html>
+
+
+```
+
+### JS-核心语法-事件监听
+
+事件:HTML事件是发生在HTML元素上的事情,例如
+- 按钮被点击
+- 鼠标移动要元素上
+- 按下键盘按键
+
+事件监听:JavaScript可以在事件触发时，就立刻调用一个函数，也称为事件绑定或注册事件.
+
+语法:`事件源.addEventListener('事件类型',事件触发执行的函数)`
+事件监听三要素:
+- 事件源：哪个dom元素出发了事件，要获取dom元素
+- 事件类型:用什么方式出发，比如：鼠标单击click
+- 事件触发执行的函数:要做什么事情 
+ 
+
+练习代码
+```html
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tlias智能学习辅助系统</title>
+    <style>
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+
+            display: flex;
+            /* flex弹性布局 */
+            justify-content: space-between;
+            /* 左右对齐 */
+
+            padding: 10px;
+            /* 内边距 */
+            align-items: center;
+            /* 垂直居中 */
+        }
+
+        .navbar h1 {
+            margin: 0;
+            /* 移除默认的上下外边距 */
+            font-weight: bold;
+            /* 加粗 */
+            color: white;
+            /* 设置字体为楷体 */
+            font-family: "楷体";
+        }
+
+        .navbar a {
+            color: white;
+            /* 链接颜色为白色 */
+            text-decoration: none;
+            /* 移除下划线 */
+        }
+
+        /* 搜索表单样式 */
+        .search-form {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 10px;
+            /* 控件之间的间距 */
+            margin: 20px 0;
+        }
+
+        .search-form input[type="text"],
+        .search-form select {
+            padding: 5px;
+            /* 输入框内边距 */
+            width: 260px;
+            /* 宽度 */
+        }
+
+        .search-form button {
+            padding: 5px 15px;
+            /* 按钮内边距 */
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            /* 边框 */
+            padding: 8px;
+            /* 单元格内边距 */
+            text-align: center;
+            /* 左对齐 */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+            color: white;
+            /* 白色文字 */
+            text-align: center;
+            /* 居中文本 */
+            padding: 10px 0;
+            /* 上下内边距 */
+            margin-top: 30px;
+        }
+
+        #container {
+            width: 80%;
+            /* 宽度为80% */
+            margin: 0 auto;
+            /* 水平居中 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <!-- 顶部导航栏 -->
+        <div class="navbar">
+            <h1>Tlias智能学习辅助系统</h1>
+            <a href="#">退出登录</a>
+        </div>
+
+        <!-- 搜索表单区域 -->
+        <form class="search-form" action="/search" method="post">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" placeholder="请输入姓名">
+
+            <label for="gender">性别：</label>
+            <select id="gender" name="gender">
+                <option value=""></option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
+
+            <label for="position">职位：</label>
+            <select id="position" name="position">
+                <option value=""></option>
+                <option value="1">班主任</option>
+                <option value="2">讲师</option>
+                <option value="3">学工主管</option>
+                <option value="4">教研主管</option>
+                <option value="5">咨询师</option>
+            </select>
+
+            <button type="submit">查询</button>
+            <button type="reset">清空</button>
+        </form>
+
+        <!-- 表格展示区 -->
+        <table>
+            <!-- 表头 -->
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>头像</th>
+                    <th>职位</th>
+                    <th>入职日期</th>
+                    <th>最后操作时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <!-- 表格主体内容 -->
+            <tbody>
+                <tr>
+                    <td>令狐冲</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="令狐冲"></td>
+                    <td>讲师</td>
+                    <td>2021-06-15</td>
+                    <td>2024-09-16 15:30</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>任盈盈</td>
+                    <td>女</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="任盈盈"></td>
+                    <td>咨询师</td>
+                    <td>2021-07-20</td>
+                    <td>2024-09-17 09:00</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>向问天</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>班主任</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>任我行</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>教研主管</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>田伯光</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="令狐冲"></td>
+                    <td>班主任</td>
+                    <td>2021-06-15</td>
+                    <td>2024-09-16 15:30</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>不戒</td>
+                    <td>女</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="任盈盈"></td>
+                    <td>班主任</td>
+                    <td>2021-07-20</td>
+                    <td>2024-09-17 09:00</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>左冷禅</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>班主任</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>定逸</td>
+                    <td>女</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>班主任</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>东方兄弟</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>讲师</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>金庸</td>
+                    <td>男</td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
+                    <td>咨询师</td>
+                    <td>2021-05-01</td>
+                    <td>2024-09-15 17:45</td>
+                    <td class="action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 页脚版权区域 -->
+        <footer class="footer">
+            <p>江苏传智播客教育科技股份有限公司</p>
+            <p>版权所有 Copyright 2006-2024 All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        //通过JS为上述的表格中数据行添加事件监听, 实现鼠标进入后, 背景色#f2e2e2; 鼠标离开后, 背景色需要设置为#fff; (JS新版本的语法)
+        //两个标签选择器之间用逗号隔开,然后再用forEach方法遍历
+        //forEach方法的参数是一个函数,这个函数有一个参数,这个参数就是当前遍历到的元素
+        document.querySelectorAll('tbody tr').forEach((tr) => {
+            tr.addEventListener('mouseenter', () => {
+                tr.style.backgroundColor = '#f2e2e2';
+            });
+            tr.addEventListener('mouseleave', () => {
+                tr.style.backgroundColor = '#fff';
+            });
+        });
+    </script>
+</body>
+
+</html>
+
+```
+
+
+常见事件
+
+|鼠标事件|键盘事件|焦点事件|表单事件|
+|:-:|:-:|:-:|:-:|
+|click(鼠标点击)|keydown(按下触发)|focus(获取焦点触发)|input(输入时触发)|
+|mouseenter(鼠标移入)|keyup(抬起触发)|blur(失去焦点)|submit(提交时触发)|
+|mouseleave(鼠标移出)|
+
+
+### JS-核心语法-事件监听（优化）
+
+JS模块化(export,import)
+
+## Vue快速入门
+
+什么是Vue?
+
+Vue是一个用于**构建用户界面**的**渐进式**JavaScript**框架**。
+
+
+Vue是一个生态系统，包含了Vue.js、Vue Router、Vuex等多个组件。
+
+
+框架：就是一套完整的项目解决方案，用于快速构建项目。
+
+优点：大大提升前端项目的开发效率
+。
+缺点：需要理解记忆框架的使用规则。（参照官网）
+
+基于数据渲染出用户看到的界面
+
+数据驱动视图
+### Vue-常见指令的使用
+
+![image](./picture/image%20copy%205.png)
+
+
+案例
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tlias智能学习辅助系统</title>
+    <style>
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+
+            display: flex;
+            /* flex弹性布局 */
+            justify-content: space-between;
+            /* 左右对齐 */
+
+            padding: 10px;
+            /* 内边距 */
+            align-items: center;
+            /* 垂直居中 */
+        }
+
+        .navbar h1 {
+            margin: 0;
+            /* 移除默认的上下外边距 */
+            font-weight: bold;
+            /* 加粗 */
+            color: white;
+            /* 设置字体为楷体 */
+            font-family: "楷体";
+        }
+
+        .navbar a {
+            color: white;
+            /* 链接颜色为白色 */
+            text-decoration: none;
+            /* 移除下划线 */
+        }
+
+        /* 搜索表单样式 */
+        .search-form {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            gap: 10px;
+            /* 控件之间的间距 */
+            margin: 20px 0;
+        }
+
+        .search-form input[type="text"],
+        .search-form select {
+            padding: 5px;
+            /* 输入框内边距 */
+            width: 260px;
+            /* 宽度 */
+        }
+
+        .search-form button {
+            padding: 5px 15px;
+            /* 按钮内边距 */
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            /* 边框 */
+            padding: 8px;
+            /* 单元格内边距 */
+            text-align: center;
+            /* 左对齐 */
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* 页脚样式 */
+        .footer {
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+            color: white;
+            /* 白色文字 */
+            text-align: center;
+            /* 居中文本 */
+            padding: 10px 0;
+            /* 上下内边距 */
+            margin-top: 30px;
+        }
+
+        #container {
+            width: 80%;
+            /* 宽度为80% */
+            margin: 0 auto;
+            /* 水平居中 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <!-- 顶部导航栏 -->
+        <div class="navbar">
+            <h1>Tlias智能学习辅助系统</h1>
+            <a href="#">退出登录</a>
+        </div>
+
+        <!-- 搜索表单区域 -->
+        <form class="search-form" action="/search" method="post">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" placeholder="请输入姓名">
+
+            <label for="gender">性别：</label>
+            <select id="gender" name="gender">
+                <option value=""></option>
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
+
+            <label for="position">职位：</label>
+            <select id="position" name="position">
+                <option value=""></option>
+                <option value="1">班主任</option>
+                <option value="2">讲师</option>
+                <option value="3">学工主管</option>
+                <option value="4">教研主管</option>
+                <option value="5">咨询师</option>
+            </select>
+
+            <button type="submit">查询</button>
+            <button type="reset">清空</button>
+        </form>
+
+        <!-- 表格展示区 -->
+        <table>
+            <!-- 表头 -->
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>头像</th>
+                    <th>职位</th>
+                    <th>入职日期</th>
+                    <th>最后操作时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+
+            <!-- 表格主体内容 -->
+            <tbody>
+                <!-- key唯一标识符, -->
+                <tr v-for="(item,index) in empList" :key="item.id">
+                    <td>{{index + 1 }}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.gender == 1 ? '女':'男'}}</td>
+                    <!-- 插值表达式不可以出现在标签内部 -->
+                    <td><img class="avatar" src="{{item.image}}" alt={{item.name}}></td>
+                    <td>{{item.job}}</td>
+                    <td>{{item.entrydate}}</td>
+                    <td>{{item.updatetime}}</td>
+                    <td class=" action-buttons">
+                        <button type="button">编辑</button>
+                        <button type="button">删除</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- 页脚版权区域 -->
+        <footer class="footer">
+            <p>江苏传智播客教育科技股份有限公司</p>
+            <p>版权所有 Copyright 2006-2024 All Rights Reserved</p>
+        </footer>
+    </div>
+
+
+    <script type="module">
+        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+        createApp({
+            data() {
+                return {
+                    empList: [
+                        {
+                            "id": 1,
+                            "name": "谢逊",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/4.jpg",
+                            "gender": 1,
+                            "job": "1",
+                            "entrydate": "2023-06-09",
+                            "updatetime": "2024-09-30T14:59:38"
+                        },
+                        {
+                            "id": 2,
+                            "name": "韦一笑",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg",
+                            "gender": 1,
+                            "job": "1",
+                            "entrydate": "2020-05-09",
+                            "updatetime": "2024-09-01T00:00:00"
+                        },
+                        {
+                            "id": 3,
+                            "name": "黛绮丝",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/2.jpg",
+                            "gender": 2,
+                            "job": "2",
+                            "entrydate": "2021-06-01",
+                            "updatetime": "2024-09-01T00:00:00"
+                        }
+                    ]
+                }
+            }
+        }).mount('#container')
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+![image](./picture/image%20copy%206.png)

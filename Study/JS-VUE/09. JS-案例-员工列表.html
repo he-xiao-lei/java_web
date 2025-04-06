@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <title>Tlias智能学习辅助系统</title>
     <style>
         /* 导航栏样式 */
         .navbar {
-            background-color: #b5b3b3; /* 灰色背景 */
-            
-            display: flex; /* flex弹性布局 */
-            justify-content: space-between; /* 左右对齐 */
+            background-color: #b5b3b3;
+            /* 灰色背景 */
 
-            padding: 10px; /* 内边距 */
-            align-items: center; /* 垂直居中 */
+            display: flex;
+            /* flex弹性布局 */
+            justify-content: space-between;
+            /* 左右对齐 */
+
+            padding: 10px;
+            /* 内边距 */
+            align-items: center;
+            /* 垂直居中 */
         }
+
         .navbar h1 {
-            margin: 0; /* 移除默认的上下外边距 */
-            font-weight: bold; /* 加粗 */
+            margin: 0;
+            /* 移除默认的上下外边距 */
+            font-weight: bold;
+            /* 加粗 */
             color: white;
             /* 设置字体为楷体 */
             font-family: "楷体";
         }
+
         .navbar a {
-            color: white; /* 链接颜色为白色 */
-            text-decoration: none; /* 移除下划线 */
+            color: white;
+            /* 链接颜色为白色 */
+            text-decoration: none;
+            /* 移除下划线 */
         }
 
         /* 搜索表单样式 */
@@ -31,15 +43,22 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 10px; /* 控件之间的间距 */
+            gap: 10px;
+            /* 控件之间的间距 */
             margin: 20px 0;
         }
-        .search-form input[type="text"], .search-form select {
-            padding: 5px; /* 输入框内边距 */
-            width: 260px; /* 宽度 */
+
+        .search-form input[type="text"],
+        .search-form select {
+            padding: 5px;
+            /* 输入框内边距 */
+            width: 260px;
+            /* 宽度 */
         }
+
         .search-form button {
-            padding: 5px 15px; /* 按钮内边距 */
+            padding: 5px 15px;
+            /* 按钮内边距 */
         }
 
         /* 表格样式 */
@@ -47,15 +66,22 @@
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
-            border: 1px solid #ddd; /* 边框 */
-            padding: 8px; /* 单元格内边距 */
-            text-align: center; /* 左对齐 */
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            /* 边框 */
+            padding: 8px;
+            /* 单元格内边距 */
+            text-align: center;
+            /* 左对齐 */
         }
+
         th {
             background-color: #f2f2f2;
             font-weight: bold;
         }
+
         .avatar {
             width: 30px;
             height: 30px;
@@ -63,19 +89,26 @@
 
         /* 页脚样式 */
         .footer {
-            background-color: #b5b3b3; /* 灰色背景 */
-            color: white; /* 白色文字 */
-            text-align: center; /* 居中文本 */
-            padding: 10px 0; /* 上下内边距 */
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+            color: white;
+            /* 白色文字 */
+            text-align: center;
+            /* 居中文本 */
+            padding: 10px 0;
+            /* 上下内边距 */
             margin-top: 30px;
         }
 
         #container {
-            width: 80%; /* 宽度为80% */
-            margin: 0 auto; /* 水平居中 */
+            width: 80%;
+            /* 宽度为80% */
+            margin: 0 auto;
+            /* 水平居中 */
         }
     </style>
 </head>
+
 <body>
     <div id="container">
         <!-- 顶部导航栏 -->
@@ -130,7 +163,8 @@
                 <tr>
                     <td>令狐冲</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="令狐冲"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="令狐冲"></td>
                     <td>讲师</td>
                     <td>2021-06-15</td>
                     <td>2024-09-16 15:30</td>
@@ -142,7 +176,8 @@
                 <tr>
                     <td>任盈盈</td>
                     <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="任盈盈"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="任盈盈"></td>
                     <td>咨询师</td>
                     <td>2021-07-20</td>
                     <td>2024-09-17 09:00</td>
@@ -154,7 +189,8 @@
                 <tr>
                     <td>向问天</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>班主任</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -166,7 +202,8 @@
                 <tr>
                     <td>任我行</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>教研主管</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -178,7 +215,8 @@
                 <tr>
                     <td>田伯光</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="令狐冲"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="令狐冲"></td>
                     <td>班主任</td>
                     <td>2021-06-15</td>
                     <td>2024-09-16 15:30</td>
@@ -190,7 +228,8 @@
                 <tr>
                     <td>不戒</td>
                     <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="任盈盈"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="任盈盈"></td>
                     <td>班主任</td>
                     <td>2021-07-20</td>
                     <td>2024-09-17 09:00</td>
@@ -202,7 +241,8 @@
                 <tr>
                     <td>左冷禅</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>班主任</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -214,7 +254,8 @@
                 <tr>
                     <td>定逸</td>
                     <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>班主任</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -226,7 +267,8 @@
                 <tr>
                     <td>东方兄弟</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>讲师</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -238,7 +280,8 @@
                 <tr>
                     <td>金庸</td>
                     <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
+                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg"
+                            alt="向问天"></td>
                     <td>咨询师</td>
                     <td>2021-05-01</td>
                     <td>2024-09-15 17:45</td>
@@ -259,7 +302,26 @@
 
     <script>
         //通过JS为上述的表格中数据行添加事件监听, 实现鼠标进入后, 背景色#f2e2e2; 鼠标离开后, 背景色需要设置为#fff; (JS新版本的语法)
-        
+        //两个标签选择器之间用逗号隔开,然后再用forEach方法遍历
+        //forEach方法的参数是一个函数,这个函数有一个参数,这个参数就是当前遍历到的元素
+        // document.querySelectorAll('tr').forEach((tr) => {
+        //     tr.addEventListener('mouseenter', () => {
+        //         tr.style.backgroundColor = '#f2e2e2';
+        //     });
+        //     tr.addEventListener('mouseleave', () => {
+        //         tr.style.backgroundColor = '#fff';
+        //     });
+        // });
+        let trs = document.querySelectorAll('tr');
+        for (let i = 0; i < trs.length; i++) {
+            trs[i].addEventListener('mouseenter', () => {
+                trs[i].style.backgroundColor = '#f2e2e2';
+            });
+            trs[i].addEventListener('mouseleave', () => {
+                trs[i].style.backgroundColor = '#fff';
+            })
+        } 
     </script>
 </body>
+
 </html>

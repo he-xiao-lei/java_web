@@ -1,29 +1,41 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <title>Tlias智能学习辅助系统</title>
     <style>
         /* 导航栏样式 */
         .navbar {
-            background-color: #b5b3b3; /* 灰色背景 */
-            
-            display: flex; /* flex弹性布局 */
-            justify-content: space-between; /* 左右对齐 */
+            background-color: #b5b3b3;
+            /* 灰色背景 */
 
-            padding: 10px; /* 内边距 */
-            align-items: center; /* 垂直居中 */
+            display: flex;
+            /* flex弹性布局 */
+            justify-content: space-between;
+            /* 左右对齐 */
+
+            padding: 10px;
+            /* 内边距 */
+            align-items: center;
+            /* 垂直居中 */
         }
+
         .navbar h1 {
-            margin: 0; /* 移除默认的上下外边距 */
-            font-weight: bold; /* 加粗 */
+            margin: 0;
+            /* 移除默认的上下外边距 */
+            font-weight: bold;
+            /* 加粗 */
             color: white;
             /* 设置字体为楷体 */
             font-family: "楷体";
         }
+
         .navbar a {
-            color: white; /* 链接颜色为白色 */
-            text-decoration: none; /* 移除下划线 */
+            color: white;
+            /* 链接颜色为白色 */
+            text-decoration: none;
+            /* 移除下划线 */
         }
 
         /* 搜索表单样式 */
@@ -31,15 +43,22 @@
             display: flex;
             flex-wrap: nowrap;
             align-items: center;
-            gap: 10px; /* 控件之间的间距 */
+            gap: 10px;
+            /* 控件之间的间距 */
             margin: 20px 0;
         }
-        .search-form input[type="text"], .search-form select {
-            padding: 5px; /* 输入框内边距 */
-            width: 260px; /* 宽度 */
+
+        .search-form input[type="text"],
+        .search-form select {
+            padding: 5px;
+            /* 输入框内边距 */
+            width: 260px;
+            /* 宽度 */
         }
+
         .search-form button {
-            padding: 5px 15px; /* 按钮内边距 */
+            padding: 5px 15px;
+            /* 按钮内边距 */
         }
 
         /* 表格样式 */
@@ -47,15 +66,22 @@
             width: 100%;
             border-collapse: collapse;
         }
-        th, td {
-            border: 1px solid #ddd; /* 边框 */
-            padding: 8px; /* 单元格内边距 */
-            text-align: center; /* 左对齐 */
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            /* 边框 */
+            padding: 8px;
+            /* 单元格内边距 */
+            text-align: center;
+            /* 左对齐 */
         }
+
         th {
             background-color: #f2f2f2;
             font-weight: bold;
         }
+
         .avatar {
             width: 30px;
             height: 30px;
@@ -63,19 +89,26 @@
 
         /* 页脚样式 */
         .footer {
-            background-color: #b5b3b3; /* 灰色背景 */
-            color: white; /* 白色文字 */
-            text-align: center; /* 居中文本 */
-            padding: 10px 0; /* 上下内边距 */
+            background-color: #b5b3b3;
+            /* 灰色背景 */
+            color: white;
+            /* 白色文字 */
+            text-align: center;
+            /* 居中文本 */
+            padding: 10px 0;
+            /* 上下内边距 */
             margin-top: 30px;
         }
 
         #container {
-            width: 80%; /* 宽度为80% */
-            margin: 0 auto; /* 水平居中 */
+            width: 80%;
+            /* 宽度为80% */
+            margin: 0 auto;
+            /* 水平居中 */
         }
     </style>
 </head>
+
 <body>
     <div id="container">
         <!-- 顶部导航栏 -->
@@ -115,6 +148,7 @@
             <!-- 表头 -->
             <thead>
                 <tr>
+                    <th>序号</th>
                     <th>姓名</th>
                     <th>性别</th>
                     <th>头像</th>
@@ -127,122 +161,17 @@
 
             <!-- 表格主体内容 -->
             <tbody>
-                <tr>
-                    <td>令狐冲</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="令狐冲"></td>
-                    <td>讲师</td>
-                    <td>2021-06-15</td>
-                    <td>2024-09-16 15:30</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>任盈盈</td>
-                    <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="任盈盈"></td>
-                    <td>咨询师</td>
-                    <td>2021-07-20</td>
-                    <td>2024-09-17 09:00</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>向问天</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>班主任</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>任我行</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>教研主管</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>田伯光</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="令狐冲"></td>
-                    <td>班主任</td>
-                    <td>2021-06-15</td>
-                    <td>2024-09-16 15:30</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>不戒</td>
-                    <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="任盈盈"></td>
-                    <td>班主任</td>
-                    <td>2021-07-20</td>
-                    <td>2024-09-17 09:00</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>左冷禅</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>班主任</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>定逸</td>
-                    <td>女</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>班主任</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>东方兄弟</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>讲师</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
-                        <button type="button">编辑</button>
-                        <button type="button">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>金庸</td>
-                    <td>男</td>
-                    <td><img class="avatar" src="https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg" alt="向问天"></td>
-                    <td>咨询师</td>
-                    <td>2021-05-01</td>
-                    <td>2024-09-15 17:45</td>
-                    <td class="action-buttons">
+                <!-- key唯一标识符, -->
+                <tr v-for="(item,index) in empList" :key="item.id">
+                    <td>{{index + 1 }}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.gender == 1 ? '女':'男'}}</td>
+                    <!-- 插值表达式不可以出现在标签内部 -->
+                    <td><img class="avatar" src="{{item.image}}" alt={{item.name}}></td>
+                    <td>{{item.job}}</td>
+                    <td>{{item.entrydate}}</td>
+                    <td>{{item.updatetime}}</td>
+                    <td class=" action-buttons">
                         <button type="button">编辑</button>
                         <button type="button">删除</button>
                     </td>
@@ -256,46 +185,48 @@
             <p>版权所有 Copyright 2006-2024 All Rights Reserved</p>
         </footer>
     </div>
-    
+
 
     <script type="module">
-      import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+        import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
 
-      createApp({
-        data() {
-          return {
-            empList: [
-              { "id": 1,
-                "name": "谢逊",
-                "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/4.jpg",
-                "gender": 1,
-                "job": "1",
-                "entrydate": "2023-06-09",
-                "updatetime": "2024-09-30T14:59:38"
-              },
-              {
-                "id": 2,
-                "name": "韦一笑",
-                "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg",
-                "gender": 1,
-                "job": "1",
-                "entrydate": "2020-05-09",
-                "updatetime": "2024-09-01T00:00:00"
-              },
-              {
-                "id": 3,
-                "name": "黛绮丝",
-                "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/2.jpg",
-                "gender": 2,
-                "job": "2",
-                "entrydate": "2021-06-01",
-                "updatetime": "2024-09-01T00:00:00"
-              }
-            ]
-          }
-        }
-      }).mount('#container')
+        createApp({
+            data() {
+                return {
+                    empList: [
+                        {
+                            "id": 1,
+                            "name": "谢逊",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/4.jpg",
+                            "gender": 1,
+                            "job": "1",
+                            "entrydate": "2023-06-09",
+                            "updatetime": "2024-09-30T14:59:38"
+                        },
+                        {
+                            "id": 2,
+                            "name": "韦一笑",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/1.jpg",
+                            "gender": 1,
+                            "job": "1",
+                            "entrydate": "2020-05-09",
+                            "updatetime": "2024-09-01T00:00:00"
+                        },
+                        {
+                            "id": 3,
+                            "name": "黛绮丝",
+                            "image": "https://web-framework.oss-cn-hangzhou.aliyuncs.com/2023/2.jpg",
+                            "gender": 2,
+                            "job": "2",
+                            "entrydate": "2021-06-01",
+                            "updatetime": "2024-09-01T00:00:00"
+                        }
+                    ]
+                }
+            }
+        }).mount('#container')
     </script>
 
 </body>
+
 </html>

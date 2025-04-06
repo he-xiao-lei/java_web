@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS-DOM</title>
 </head>
+
 <body>
 
   <h1 id="title1">11111</h1>
@@ -12,7 +14,19 @@
   <h1>33333</h1>
 
   <script>
-    
+    //修改第一个h1标签的内容
+
+    let h = document.querySelector('h1');
+    h.innerHTML = '48123428-1039';
+    // document.querySelectorAll('h1')[1].innerHTML = '555555';
+
+    let all = document.querySelectorAll('h1');
+
+    for (let i = 0; i < all.length; i++) {
+      all[i].innerHTML = '666666';
+    }
+
   </script>
 </body>
+
 </html>

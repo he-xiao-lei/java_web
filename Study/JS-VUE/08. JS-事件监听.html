@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JS事件</title>
 </head>
+
 <body>
-  
+
   <input type="button" id="btn1" value="点我一下试试1">
   <input type="button" id="btn2" value="点我一下试试2">
 
   <script>
-    
+    // 事件监听写法-可以多次绑定同一个事件
+    document.querySelector('#btn1').addEventListener('click', () => {
+      alert('点我一下试试1')
+    });
+    document.querySelector('#btn1').addEventListener('click', () => {
+      alert('点我一下试试11')
+    });
+    //事件监听写法-早期写法（不可以同时绑定同一个事件,后面的会覆盖前面的）
+    document.querySelector('#btn2').onclick = () => {
+      alert('点我一下试试2')
+    };
+    document.querySelector('#btn2').onclick = () => {
+      alert('点我一下试试22')
+    };
   </script>
 </body>
+
 </html>

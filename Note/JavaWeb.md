@@ -894,7 +894,7 @@ DOM操作核心思想: 将网页中所有元素当作对象处理，（标签的
 - 事件源：哪个dom元素出发了事件，要获取dom元素
 - 事件类型:用什么方式出发，比如：鼠标单击click
 - 事件触发执行的函数:要做什么事情 
- 
+
 
 练习代码
 ```html
@@ -1569,7 +1569,7 @@ V-show:通过css样式，来控制元素的展示与隐藏（频繁切换的场�
 
 作用: 在表单元素上使用,双向数据绑定。可以方便获取 或 设置 表单项数据
 语法：v-model="变量名"
- 
+
 
  v-on
  - 作用：为html标签绑定事件(添加事件监听)
@@ -1851,12 +1851,12 @@ V-show:通过css样式，来控制元素的展示与隐藏（频繁切换的场�
 - 作用
     - 数据交换:通过Ajax可以给服务器发送请求，并获取服务器响应数据.
     - 异步交互：可以在**不重新加载整个页面**的情况下，与服务器交换数据并**更新部分网页**的技术，如果搜索用户名是否可用等.
-Axios
+    Axios
 - 介绍：Axios 对原生Ajax进行封装，简化书写，快速开发
 - 步骤：
     - 引入js文件
     - 使用Axios发送请求，并获取响应结果
- 
+
 
 XML:`Extensible Markup Language`,**可扩展标记语言,本质是一种数据格式,可以用来存储复杂的数据结构**
 
@@ -2395,3 +2395,1567 @@ Web 服务器对 HTTP 协议的响应数据进行了封装 (HttpServletRespoonse
 
 
 开发web程序,完成用户列表渲染展示
+
+
+
+### 反射（之前的）
+
+
+### 概述
+反射允许对封装类的字段，方法何构造函数的信息进行编程访问
+要先获取字节码对象就是class对象
+
+
+### 获取class的三种方式
+1. Class.forName("全类名")
+    - 使用场景:源代码阶段，还没有编译运行
+2. 类名.class
+    - 加载阶段
+3. 对象.getClass();
+    - 运行阶段
+
+
+### 反射获取构造方法
+
+#### Class类中用于获取构造方法的方法
+- `Constructor<?>[] getConstructors()`：返回所有公共构造方法对象的数组
+- `Constructor<?>[] getDeclaredConstructors()`：返回所有构造方法对象的数组
+- `Constructor<T> getConstructor(Class<?>... parameterTypes)`：返回单个公共构造方法对象
+- `Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes)`：返回单个构造方法对象
+
+#### Constructor类中用于创建对象的方法
+- `T newInstance(Object... initargs)`：根据指定的构造方法创建对象
+- `setAccessible(boolean flag)`：设置为`true`，表示取消访问检查 
+
+
+代码与笔记
+```java
+
+package Reflections.Demo2;
+
+import org.hamcrest.core.StringContains;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+
+public class Demo2 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
+        /**
+         * #### Class类中用于获取构造方法的方法
+         * - `Constructor<?>[] getConstructors()`：返回所有公共构造方法对象的数组
+         * - `Constructor<?>[] getDeclaredConstructors()`：返回所有构造方法对象的数组
+         * - `Constructor<T> getConstructor(Class<?>... parameterTypes)`：返回单个公共构造方法对象
+         * - `Constructor<T> getDeclaredConstructor(Class<?>... parameterTypes)`：返回单个构造方法对象
+         *
+         * #### Constructor类中用于创建对象的方法
+         * - `T newInstance(Object... initargs)`：根据指定的构造方法创建对象
+         * - `setAccessible(boolean flag)`：设置为`true`，表示取消访问检查
+         */
+        //获取class字节码文件对象,
+        Class clz = Class.forName("Reflections.Demo2.Demo2Teacher");
+        Constructor[] constructors = clz.getConstructors();
+        Arrays.stream(constructors).forEach(System.out::println);
+        System.out.println("----------------------------");
+//        获取所有构造方法(包括protected和private)
+        for (Constructor declaredConstructor : clz.getDeclaredConstructors()) {
+            System.out.println(declaredConstructor);
+        }
+
+        System.out.println("----------------------------");
+        //获取单个的
+        Constructor constructor = clz.getConstructor();
+        System.out.println(constructor);
+        //后面要加参数的字节码文件
+        Constructor constructor1 = clz.getDeclaredConstructor(String.class);
+        System.out.println(constructor1);
+        Constructor declaredConstructor = clz.getDeclaredConstructor(String.class, int.class);
+        System.out.println(declaredConstructor);
+
+        System.out.println("获取权限修饰符");
+        int modifiers = declaredConstructor.getModifiers();
+        System.out.println(modifiers);
+
+        System.out.println("获取这个构造方法的参数的个数");
+        int parameterCount = declaredConstructor.getParameterCount();
+        System.out.println(parameterCount);
+
+
+        System.out.println("通过constructor对象创建对象");
+        //with modifiers "private"，因为上面那个declared只是为了让你看到构造，并不代表可以使用
+        //想要使用需要使用以下方式
+        //临时取消权限校验
+        //暴力反射
+        declaredConstructor.setAccessible(true);
+        Demo2Teacher o = (Demo2Teacher)declaredConstructor.newInstance("张三", 23);
+
+        System.out.println(o.getName());
+
+
+    }
+}
+
+```
+
+
+### 反射获取成员变量
+
+
+练习代码
+
+
+```java
+
+
+
+
+package Reflections.Demo3;
+
+import java.lang.reflect.Field;
+
+public class Demo3 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, IllegalAccessException {
+        /**
+         * ### 利用反射获取成员变量
+         * #### Class类中用于获取成员变量的方法
+         * - `Field[] getFields()`：返回所有公共成员变量对象的数组
+         * - `Field[] getDeclaredFields()`：返回所有成员变量对象的数组
+         * - `Field getField(String name)`：返回单个公共成员变量对象
+         * - `Field getDeclaredField(String name)`：返回单个成员变量对象
+         *
+         * #### Field类中用于创建对象的方法
+         * - `void set(Object obj, Object value)`：赋值
+         * - `Object get(Object obj)`：获取值
+         */
+        //获取字节码文件
+        Class clazz = Class.forName("Reflections.Demo3.Deomo3Bean");
+
+        for (Field field : clazz.getFields()) {
+            System.out.println("公共的变量:"+ field);
+        }
+        //获取所有成员变量
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            System.out.println("declaredField = " + declaredField);
+        }
+        //获取单个
+        System.out.println("获取单个");
+        Field name1 = clazz.getDeclaredField("name");
+        String name = name1.getName();
+        System.out.println(name);
+//        获得权限修饰符
+        int modifiers = name1.getModifiers();
+        System.out.println(modifiers);
+
+        System.out.println("获取成员变量数据类型");
+        Class<?> type = name1.getType();
+        System.out.println(type);
+
+        System.out.println("获取成员变量记录的值");
+        Deomo3Bean d3 = new Deomo3Bean("zhangsan",13,"北京",true);
+        name1.setAccessible(true);
+        Object o = name1.get(d3);
+        System.out.println(o);
+
+        System.out.println("修改原来对象里面的值");
+        name1.set(d3,"张三");
+        Object o1 = name1.get(d3);
+        System.out.println(o1);
+
+
+    }
+}
+
+```
+
+
+### 反射获取成员方法
+
+ 利用反射获取成员方法
+#### Class类中用于获取成员方法的方法
+- `Method[] getMethods()`：返回所有公共成员方法对象的数组，包括继承的
+- `Method[] getDeclaredMethods()`：返回所有成员方法对象的数组，不包括继承的
+- `Method getMethod(String name, Class<?>... parameterTypes)`：返回单个公共成员方法对象
+- `Method getDeclaredMethod(String name, Class<?>... parameterTypes)`：返回单个成员方法对象
+
+#### Method类中用于创建对象的方法
+- `Object invoke(Object obj, Object... args)`：运行方法
+    - 参数一：用`obj`对象调用该方法
+    - 参数二：调用方法的传递的参数（如果没有就不写）
+    - 返回值：方法的返回值（如果没有就不写） 
+
+
+练习代码
+```java
+
+
+package Reflections.Demo4;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
+public class Demo4 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, InvocationTargetException, IllegalAccessException {
+        /**
+         * #### Class类中用于获取成员方法的方法
+         * - `Method[] getMethods()`：返回所有公共成员方法对象的数组，包括继承的
+         * - `Method[] getDeclaredMethods()`：返回所有成员方法对象的数组，不包括继承的
+         * - `Method getMethod(String name, Class<?>... parameterTypes)`：返回单个公共成员方法对象
+         * - `Method getDeclaredMethod(String name, Class<?>... parameterTypes)`：返回单个成员方法对象
+         *
+         * #### Method类中用于创建对象的方法
+         * - `Object invoke(Object obj, Object... args)`：运行方法
+         *     - 参数一：用`obj`对象调用该方法
+         *     - 参数二：调用方法的传递的参数（如果没有就不写）
+         *     - 返回值：方法的返回值（如果没有就不写）
+         *
+         *     - 获取方法的修饰符
+         * - 获取方法的名字
+         * - 获取方法的形参
+         * - 获取方法的返回值
+         * - 获取方法抛出的异常
+         */
+
+
+        Class clazz = Class.forName("Reflections.Demo4.Demo4Class");
+
+        for (Method method : clazz.getMethods()) {//所有公共的方法，包括父类继承的
+            System.out.println("method = " + method);
+        }
+        Method[] declaredMethods = clazz.getDeclaredMethods();//所有的方法(包含私有)，不包含继承的
+        for (Method declaredMethod : declaredMethods) {
+            System.out.println("declaredMethod = " + declaredMethod);
+        }
+
+
+        //获取修饰符
+        //单个
+        Method sleep = clazz.getMethod("sleep");
+        int modifiers = sleep.getModifiers();
+        System.out.println("modifiers = " + modifiers);
+
+
+        Method say = clazz.getDeclaredMethod("say", String.class);
+        int modifiers1 = say.getModifiers();
+        System.out.println("modifiers1 = " + modifiers1);
+
+        //获取方法名字
+        String name = say.getName();
+        System.out.println(name);
+        //获取方法形参
+        for (Parameter parameter : say.getParameters()) {
+            System.out.println(parameter);
+        }
+
+        //获取方法抛出的异常
+        /**
+         * 反射获取异常类型
+         * 反射机制能够在运行时检查类、方法、字段等信息。Method类中的getExceptionTypes()方法会返回一个Class数组，该数组包含了方法声明中使用throws关键字列出的所有异常类型。
+         */
+        Class[] exceptionTypes = say.getExceptionTypes();
+        for (Class exceptionType : exceptionTypes) {
+            System.out.println(exceptionType);
+        }
+
+
+        //让方法运行起来
+        Demo4Class d4 = new Demo4Class("a",13,"c");
+        say.setAccessible(true);
+        //方法调用者
+        Object invoke = say.invoke(d4, "hahaha");
+        System.out.println(invoke);
+
+
+    }
+}
+
+```
+### 反射综合练习-保存任意对象数据
+
+反射的作用：
+1. 获取一个类里面的所有信息，获取到以后，再执行其他业务逻辑
+2. 结合配置文件，动态的创建对象并调用方法
+
+练习1：对于任意一个对象，都可以把对象所有的字段名和值都保存到文件中 
+
+练习代码
+```java
+
+package Reflections.Demo5;
+
+import java.io.*;
+import java.lang.reflect.Field;
+
+public class Demo5  {
+    public static void main(String[] args) throws IllegalAccessException, IOException {
+        Student s = new Student("zhangsan",13,'男', 172.2F,"跑步");
+        Teacher t = new Teacher("小l",10000);
+        saveObject(s);
+
+
+    }
+    public static <T> void saveObject(T obj) throws IllegalAccessException, IOException {
+        //获取字节码文件对象
+        Class<?> aClass = obj.getClass();
+        //创建IO流
+        BufferedWriter bfr = new BufferedWriter(new FileWriter("C:\\baidunetdiskdownload\\a.txt"));
+
+        //获取所有成员变量
+        Field[] declaredFields = aClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            declaredField.setAccessible(true);
+            //获取变量名称
+            String name = declaredField.getName();
+            //获取变量的值
+            Object value = declaredField.get(obj);
+            System.out.println(name+"="+value);
+            bfr.write(name+"="+value+"\n");
+            //这里可以\n或者newLine()
+        }
+        bfr.close();
+        //获取所有成员方法
+        aClass.getDeclaredMethods();
+
+
+    }
+
+}
+
+
+
+
+
+```
+
+### 反射练习二
+跟配置文件结合动态创建
+反射可以跟配置文件结合的方式，动态的创建对象，并调用方法
+
+
+![反射](./picture/reflect.png)
+
+
+### 动态代理
+侵入式修改，很少干在生产环境中
+特点：无侵入式的给代码添加额外功能
+
+对象有什么方法想被代理，代理就一定要有对应的方法
+
+使用接口
+![代理](./picture/Agent.png)
+
+如何为Java对象创建一个代理对象
+- Java.lang.reflect.Proxy类：提供了为对象产生代理对象的方法:
+
+参数1：用于指定哪个类加载器，去加载生成的代理类
+参数2：指定接口，这些接口用于指定生成的代理长什么样，也就是有哪些方法
+参数3：用来指定生成的代理对象要干什么事情
+
+
+
+### SpringBoot案例
+
+代码:
+UserController
+```java
+package cloud.hexiaolei.demo.controller;
+
+import cloud.hexiaolei.demo.pojo.user;
+import cn.hutool.core.io.IoUtil;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 用户信息的controller
+ * 请求处理类
+ */
+@RestController
+public class UserController {
+
+    @RequestMapping("/list")
+    public List<user> list() throws FileNotFoundException {
+        //1.加载并读取user.txt文件内容
+//        InputStream is = new FileInputStream("src\\main\\resources\\user.txt");
+        //利用类加载器找到资源文件
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("user.txt");
+        ArrayList<String> objects = IoUtil.readLines(in, StandardCharsets.UTF_8, new ArrayList<>());
+
+
+        //2.解析用户信息，封装为对象User->list集合,并且返回
+        //
+        return objects.stream().map(x -> {
+            String[] parts = x.split(",");
+            Integer id = Integer.parseInt(parts[0]);
+            String username = parts[1];
+            String password = parts[2];
+            String name = parts[3];
+            Integer age = Integer.parseInt(parts[4]);
+            LocalDateTime date = LocalDateTime.parse(parts[5], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return new user(id, username, password, name, age, date);
+        }).collect(Collectors.toList());
+
+
+        //3.转换为JSON返回
+
+
+
+
+
+    }
+}
+
+
+
+```
+
+User
+```java
+
+package cloud.hexiaolei.demo.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+//实体类
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class user {
+    private Integer id;
+    private String username;
+    private String password;
+    private String name;
+    private Integer age;
+    private LocalDateTime updateTime;
+
+}
+
+```
+
+
+user.html
+```html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户列表数据</title>
+    <style>
+        /*定义css，美化表格*/
+        table{
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 14px;
+        }
+        tr {
+            height: 40px;
+        }
+        th,td{
+            border: 1px solid #ccc;
+        }
+        thead{
+            background-color: #e8e8e8;
+        }
+        h1{
+            text-align: center;
+            font-family: 楷体;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>用户列表数据</h1>
+        <!--定义一个表格,包括6列,分别是: ID, 用户名, 密码, 姓名, 年龄, 更新时间-->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>姓名</th>
+                    <th>年龄</th>
+                    <th>更新时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in userList">
+                    <td>{{user.id}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.age}}</td>
+                    <td>{{user.updateTime}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!--引入axios-->
+    <script src="js/axios.min.js"></script>
+    <script type="module">
+        import { createApp } from './js/vue.esm-browser.js'
+        createApp({
+            data() {
+                return {
+                    userList: []
+                }
+            },
+            methods: {
+                async search(){
+                    const result = await axios.get('/list');
+                    this.userList = result.data;
+                }
+            },
+            mounted() {
+                this.search();
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
+```
+
+
+文本文件
+```txt
+1,daqiao,1234567890,大乔,22,2024-07-15 15:05:45
+2,xiaoqiao,1234567890,小乔,18,2024-07-15 15:12:09
+3,diaochan,1234567890,貂蝉,21,2024-07-15 15:07:16
+4,lvbu,1234567890,吕布,28,2024-07-16 10:05:15
+5,zhaoyun,1234567890,赵云,27,2024-07-16 11:03:28
+6,zhangfei,1234567890,张飞,31,2024-07-16 11:03:28
+7,guanyu,1234567890,关羽,34,2024-07-16 12:05:12
+8,liubei,1234567890,刘备,37,2024-07-16 15:03:28
+```
+
+### 分层解耦
+
+三层架构
+- controller
+> 接受请求，响应数据
+- Service
+> 逻辑处理
+- Dao
+> 数据访问
+
+- controller:控制层，接收前端发送给的请求，对请求进行处理，并响应数据
+- service:业务处理层，处理具体的业务逻辑
+- dao:数据访问层(Date Access Object)(持久层),负责数据访问操作，包括数据的增删改查
+
+
+
+
+ ## 分层解耦-IOC与DI入门
+ 耦合:衡量软件中各个层/各个模块的依赖关联程度
+ 内聚:软件中各个功能模块内部的功能练习
+
+ 软件设计软则：高内聚，低耦合
+
+解耦
+
+Dao.UserDao
+
+```java
+package cloud.hexiaolei.demo.Dao;
+
+import java.util.List;
+
+public interface UserDao {
+    List<String> findAll();
+}
+```
+
+Dao.impl.UserDaoimpl
+
+```java
+package cloud.hexiaolei.demo.Dao.impl;
+
+import cloud.hexiaolei.demo.Dao.UserDao;
+import cn.hutool.core.io.IoUtil;
+import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+@Component//将当前类给IOC容器管理
+public class UserDaoimpl implements UserDao {
+    @Override
+    public List<String> findAll() {
+//1.加载并读取user.txt文件内容
+//        InputStream is = new FileInputStream("src\\main\\resources\\user.txt");
+        //利用类加载器找到资源文件
+        InputStream in = this.getClass().getClassLoader().getResourceAsStream("user.txt");
+        ArrayList<String> objects = IoUtil.readLines(in, StandardCharsets.UTF_8, new ArrayList<>());
+        return objects;
+    }
+}
+
+```
+
+Service.UserService
+
+```java
+package cloud.hexiaolei.demo.Service;
+
+import cloud.hexiaolei.demo.pojo.User;
+
+import java.util.List;
+
+public interface UserService {
+    List<User> findAll();
+
+}
+```
+
+Service.impl.UserServiceImpl
+
+```java
+package cloud.hexiaolei.demo.Service.impl;
+
+import cloud.hexiaolei.demo.Dao.UserDao;
+import cloud.hexiaolei.demo.Dao.impl.UserDaoimpl;
+import cloud.hexiaolei.demo.Service.UserService;
+import cloud.hexiaolei.demo.pojo.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+@Component
+public class UserServiceimpl implements UserService {
+    //1.调用DAO获取数据
+    @Autowired
+    private UserDao userDao;
+
+
+    @Override
+    public List<User> findAll() {
+        List<User> collect = userDao.findAll().stream().map(x -> {
+            String[] parts = x.split(",");
+            Integer id = Integer.parseInt(parts[0]);
+            String username = parts[1];
+            String password = parts[2];
+            String name = parts[3];
+            Integer age = Integer.parseInt(parts[4]);
+            LocalDateTime date = LocalDateTime.parse(parts[5], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return new User(id, username, password, name, age, date);
+        }).toList();
+        return collect;
+    }
+}
+
+```
+
+Controller.UserController
+
+```java
+package cloud.hexiaolei.demo.Controller;
+
+import cloud.hexiaolei.demo.Service.UserService;
+import cloud.hexiaolei.demo.Service.impl.UserServiceimpl;
+import cloud.hexiaolei.demo.pojo.User;
+import cn.hutool.core.io.IoUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 用户信息的controller
+ * 请求处理类
+ */
+@RestController
+public class UserController {
+    @Autowired//应用程序运行时，会自动查找该类型的Bean对象，并赋值给当前成员变量
+    private UserService userService;
+
+    @RequestMapping("/list")
+    public List<User> list() throws FileNotFoundException {
+        return userService.findAll();
+    }
+}
+
+```
+
+实体类
+
+pojo.user
+
+```java
+package cloud.hexiaolei.demo.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
+//实体类
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+    private Integer id;
+    private String username;
+    private String password;
+    private String name;
+    private Integer age;
+    private LocalDateTime updateTime;
+
+}
+
+```
+
+
+
+ 控制反转:`Inversion Of Control` ,简称IOC.对象的创建控制权由程序自身转移到外部(容器),这种思想被称为控制反转
+ 依赖注入: `Dependency Injection`, 简称DI容器,为应用程序提供运行时，所依赖的资源，称之为依赖注入.
+ Bean对象:IOC容器中创建，管理的对象，称之为`Bean`
+
+
+
+ ### IOC
+
+ 1.讲Dao及Service层的实现类，交给IOC容器管理
+ 2.为Controller 及 Service 注入运行时所依赖的对象
+
+
+@Compement:可以将本类添加到IOC容器中
+
+@Autowired注解:应用程序运行时，会自动查找该类型的Bean对象，并赋值给当前成员变量
+
+
+
+| 注解          | 说明                   | 位置                                                |
+| ------------- | ---------------------- | --------------------------------------------------- |
+| `@Component`  | 声明 bean 的基础注解   | 不属于以下三类时，用此注解                          |
+| `@Controller` | `@Component`的衍生注解 | 标注在控制层类上                                    |
+| `@Service`    | `@Component`的衍生注解 | 标注在业务层类上                                    |
+| `@Repository` | `@Component`的衍生注解 | 标注在数据访问层类上（由于与 mybatis 整合，用的少） |
+
+还可以给beans加名字，在后面加括号，填名字就行
+
+- 要想让bean注解生效，还需要被组件扫描注解@ComponentScan扫描
+
+- 该注解虽然没有显式配置，但是实际上已经包含在了启动类声明@SpringBootApplication中，默认扫描范围是**启动类所在包和子包内**
+
+```java
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Inherited
+@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(
+    excludeFilters = {@Filter(
+    type = FilterType.CUSTOM,
+    classes = {TypeExcludeFilter.class}
+), @Filter(
+    type = FilterType.CUSTOM,
+    classes = {AutoConfigurationExcludeFilter.class}
+)}
+)
+```
+
+
+
+
+
+### DI
+
+三种基于@Autowired进行依赖注入的方式
+
+1. 属性注入
+
+```java
+①.属性注入
+@RestController
+public class UserController {
+	@Autowired
+	private UserService userService;
+    //....
+}
+
+```
+
+2. 构造函数注入
+
+```java
+构造函数注入
+@RestController
+public class UserController {
+	private final UserService user Service;
+	@Autowired
+	public UserController(UserService userService) {
+		this.user Service = user Service;
+    }
+}
+```
+
+3. setter注入
+
+```java
+3.setter注入
+@RestController
+public class UserController {
+	private UserService user Service;
+		@Autowired
+		public void setuserService(UserService userService) {
+			this.userService = userService;
+        }
+}
+```
+
+- Autowired注解，默认是按照**类型**进行注入的
+- 如果存在多个相同类型的Bean，将会报出如下错误
+
+```java
+Parameter 0 of method setUserService in cloud.hexiaolei.demo.Controller.UserController required a single bean, but 2 were found:
+	- userServiceimpl: defined in file [C:\Users\32394\IdeaProjects\myweb\demo\target\classes\cloud\hexiaolei\demo\Service\impl\UserServiceimpl.class]
+	- userServiceimpl2: defined in file [C:\Users\32394\IdeaProjects\myweb\demo\target\classes\cloud\hexiaolei\demo\Service\impl\UserServiceimpl2.class]
+```
+
+解决方式
+
+方案1：@Primary
+
+```
+//@Primary
+@Service
+//@Component
+public class UserServiceimpl2 implements UserService {
+    //1.调用DAO获取数据
+    @Autowired
+    private UserDao userDao;
+
+
+    @Override
+    public List<User> findAll() {
+        List<User> collect = userDao.findAll().stream().map(x -> {
+            String[] parts = x.split(",");
+            Integer id = Integer.parseInt(parts[0])+100;
+            String username = parts[1];
+            String password = parts[2];
+            String name = parts[3];
+            Integer age = Integer.parseInt(parts[4]);
+            LocalDateTime date = LocalDateTime.parse(parts[5], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            return new User(id, username, password, name, age, date);
+        }).toList();
+        return collect;
+    }
+}
+```
+
+方案2:   @Qualifier
+
+```
+//    @Qualifier("userServiceimpl2")
+//    @Autowired//应用程序运行时，会自动查找该类型的Bean对象，并赋值给当前成员变量
+//    private UserService userService;
+```
+
+方案3:   @Resource
+
+```
+@Resource(name = "userServiceimpl2")
+private UserService userService;
+```
+
+1. 依赖注入的注解 - `@Autowired`：默认按照类型自动装配 - 如果同类型的bean存在多个：  - `@Primary`  - `@Autowired` + `@Qualifier`  - `@Resource` ### 2. `@Resource` 与 `@Autowired`区别 ？ - `@Autowired`是Spring框架提供的注解，而`@Resource`是JavaEE规范提供的 - `@Autowired`默认是按照类型注入，而`@Resource`默认是按照名称注入 
+
+
+
+
+
+## MySQL
+
+### DDL语句
+
+```sql
+create table tablename(
+    字段1 字段类型 [约束] [comment 字段1注释],
+    ......
+    字段2 字段类型 [约束] [comment 字段2注释]
+)[comment 表注释];
+```
+
+
+
+## 约束
+
+约束：约束是作用于表中字段上的规则，用于限制存储在表中的数据
+
+目的：保证数据库中数据的正确性、有效性和完整性。 
+
+| 约束     | 描述                                             | 关键字      |
+| -------- | ------------------------------------------------ | ----------- |
+| 非空约束 | 限制该字段值不能为 null                          | not null    |
+| 唯一约束 | 保证字段的所有数据都是唯一、不重复的             | unique      |
+| 主键约束 | 主键是一行数据的唯一标识，要求非空且唯一         | primary key |
+| 默认约束 | 保存数据时，如果未指定该字段值，则采用默认值     | default     |
+| 外键约束 | 让两张表的数据建立连接，保证数据的一致性和完整性 | foreign key |
+
+1. **MySQL数据库中分为哪几类约束，对应的关键字是什么?**
+   - primary key、not null、unique、default、foreign key
+2. **如何实现主键自增的效果呢?**
+   - 定义主键的时候指定关键字 auto_increment
+3. **一个字段上是否可以添加多个约束 ？**
+   - 可以，多个约束之间使用空格分开 
+
+
+
+### MySQL数据类型
+
+| 数值类型  | tinyint | 1                                                     | (-128，127)                                                | (0，255)         | 小整数值                                          |      |
+| --------- | ------- | ----------------------------------------------------- | ---------------------------------------------------------- | ---------------- | ------------------------------------------------- | ---- |
+| smallint  | 2       | (-32768，32767)                                       | (0，65535)                                                 | 大整数值         |                                                   |      |
+| mediumint | 3       | (-8388608，8388607)                                   | (0，16777215)                                              | 大整数值         |                                                   |      |
+| int       | 4       | (-2147483648，2147483647)                             | (0，4294967295)                                            | 大整数值         |                                                   |      |
+| bigint    | 8       | (-2^63，2^63-1)                                       | (0，2^64-1)                                                | 极大整数值       |                                                   |      |
+| float     | 4       | (-3.402823466 E+38，3.402823466351  E+38)             | 0 和 (1.175494351  E-38，3.402823466 E+38)                 | 单精度浮点数值   | float(5,2)：5表示整个数字长度，2 表示小数位个数   |      |
+| double    | 8       | (-1.7976931348623157 E+308，1.7976931348623157 E+308) | 0 和  (2.2250738585072014 E-308，1.7976931348623157 E+308) | 双精度浮点数值   | double(5,2)：5表示整个数字长度，2 表示小数位个数  |      |
+| decimal   |         |                                                       |                                                            | 小数值(精度更高) | decimal(5,2)：5表示整个数字长度，2 表示小数位个数 |      |
+
+例子：
+
+年龄
+
+无符号（0-255）,占用1B
+
+age tinyint unsigned
+
+
+
+
+
+## MyBatis
+
+一款优秀的持久层框架
+
+### MyBatis入门程序
+
+- 准备工作
+  - 创建SpringBoot工程，引入MyBatis相关依赖
+  - 准备数据库表user,实体类user
+  - 配置MyBatis(在application.properties或者yml中配置数据库连接)
+- 编写Mabatis程序:编写MaBatis的持久层接口，定义（注解/xml）
+
+MyBatis命名规范:XxxMapper,也称为Mapper接口
+
+####  1. SpringBoot+Mybatis 入门程序操作步骤？
+
+- 准备工作
+
+  - A. 创建 springboot 工程，引入 Mybatis 相关依赖
+
+  - B. 准备数据库表、实体类
+
+  - C. application.properties 中配置数据库连接信息
+
+  - 配置代码
+
+  - ```properties
+    spring.datasource.url=jdbc:mysql://localhost:3306/hxl
+    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+    spring.datasource.username=root
+    spring.datasource.password=123456
+    ```
+
+- 定义 Mapper 接口 (`@Mapper`)，编写 SQL
+
+#### 2. SpringBoot 的单元测试类上需要加什么注解 ？
+
+- `@SpringBootTest`：会在单元测试运行时，加载 springBoot 的环境
+- **注意**：测试类所在包需要与引导类包名相同 (或放在引导类所在包的子包下)
+
+
+
+### 辅助配置
+
+Mybatis的日志输出
+
+配置代码:`mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl`
+
+### 数据库连接池
+
+- **数据库连接池**是一个容器，负责分配，管理数据库连接(Connection)
+
+- 他允许应用程序重复使用一个现有的数据库连接，而不是重复创建连接
+- 释放空闲时间超过最大空闲时间的连接，来避免因为没有释放连接而引起的数据库连接泄露
+- 优势
+  1. 资源重用
+  2. 提升系统响应速度
+  3. 避免数据库连接泄露
+
+标准接口:DataSource
+
+- 官方（sun）提供的数据库连接池接口，由第三方组织实现此接口
+- 功能：获取连接`Connection getConnection() throws SQLException`
+
+
+
+SpringBoot默认连接池:Hikari
+
+- Druid(德鲁伊)
+  - Druid连接池是阿里巴巴开源的数据库连接池项目
+  - 功能强大，性能优秀，是Java语言最后好的数据库连接池之一
+
+**如何切换默认数据库连接池**
+
+1. pom引入依赖
+
+   ```xml
+   <dependency>
+               <groupId>com.alibaba</groupId>
+               <artifactId>druid-spring-boot-starter</artifactId>
+               <version>1.2.22</version>
+    </dependency>
+   ```
+
+   
+
+2. 导入配置
+
+   ```properties
+   #配置druid作为数据库连接池
+   spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+   ```
+
+### MyBatis-增删改查-删除操作
+
+- 需求:根据删除用户信息
+
+- SQL:`delect * from user where id = 5;`
+
+- Mapper接口
+
+  ```java
+  @Delect("Delect from user where id = 5;")
+  public void delectById();
+  ```
+
+  可以使用占位符
+
+  ```java
+  @Delete("delete from user where id = #{id};")
+      List<User> deleteById(Integer id);
+  ```
+
+  面试会问
+
+  | 符号   | 说明                                                   | 场景                       | 优缺点                |
+  | ------ | ------------------------------------------------------ | -------------------------- | --------------------- |
+  | #{...} | 占位符。执行时，会将 #{...} 替换为？，生成预编译 SQL   | 参数值传递                 | 安全、性能高 （推荐） |
+  | ${...} | 拼接符。直接将参数拼接在 SQL 语句中，存在 SQL 注入问题 | 表名、字段名动态设置时使用 | 不安全、性能低        |
+
+### MyBatis-增删改查-插入用户
+
+需求：添加一个用户
+
+命令:`insert into user(username,password,name,age) value ('aaa','bbb','ccc',12);`
+
+Mapper接口:
+
+```java
+@Insert("insert into user(username,password,name,age) value ('hxl','asdflkj;sdf','ccc',12);")
+void insertUser();
+```
+
+参数动态传入
+
+```java
+@Insert("insert into user(username,password,name,age) value (#{username},#{password},#{name},#{age})")
+void insertUser(String username,String password,String name,Integer age);
+```
+
+从动态用户类动态加载属性值
+
+```java
+@Insert("insert into user(username,password,name,age) value (#{username},#{password},#{name},#{age})")
+void insertUser(User user);
+```
+
+### MyBatis-增删改查-插入用户
+
+需求:根据ID更新客户信息
+
+代码:update user set username='zhouyu',password='112233',name='王朔',age=11 where id = 1;
+
+```java
+@Insert("insert into user(username,password,name,age) value (#{username},#{password},#{name},#{age})")
+void insertUser(User user);
+```
+
+测试代码
+
+```java
+void InsertUserTest(){
+        User user = new User(null,"suiseiseki", "123456", "hexiaolei", 18);
+        userMapper.insertUser(user);
+        List<User> all = userMapper.findAll();
+        all.forEach(System.out::println);
+    }
+```
+
+### MyBatis-增删改查-更新
+
+Mapper接口:
+
+```java
+@Update("update user set username=#{username},password=#{password},name=#{name},age=#{age} where id=#{id}")
+    void updateUser(User user);
+```
+
+测试代码
+
+```java
+@Test
+    void UpdateUserTest(){
+        User user = new User(2,"wuyanzu", "1aaaaa", "hexiaole", 10);
+        userMapper.updateUser(user);
+        List<User> all = userMapper.findAll();
+        all.forEach(System.out::println);
+    }
+```
+
+### MyBatis-增删改查-查询用户
+
+```java
+@Select("select * from user where username=#{username} and password=#{password}")
+//@Param注解作用是给形参起名字
+User findByUsernameAndPassword(@Param("username")String username,@Param("password")String password);
+```
+
+测试代码
+
+```java
+@Test
+void findByUsernameAndPasswordTest(){
+    User user = userMapper.findByUsernameAndPassword("wuyanzu", "1aaaaa");
+    System.out.println("user = " + user);
+}
+```
+
+说明：基于官方骨架创建的springboot项目中，接口编译时会保留方法形参名，所以@param注解可以省略
+
+### XML映射配置
+
+- 在MyBatis中,既可以通过注解配置sql语句，也可以通过xml语句配置
+
+- 默认规则:
+
+  1. XML映射文件的名称与Mapper接口名称一致，并且将XML映射文件和Mapper接口放置在相同包下(同包同名)
+  2. XML映射文件的namespace属性和Mapper接口全限定名一致
+  3. XML映射文件中的sql语句的id与Mapper接口的放方法名一致,并保持返回类型一直
+
+   XML配置
+
+  ```xml-dtd
+  <?xml version="1.0" encoding="UTF-8" ?>
+  <!DOCTYPE mapper
+          PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+          "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="cloud.hexiaolei.mybatisproject.Mapper.UserMapper">
+      <select id="findAll" resultType="cloud.hexiaolei.mybatisproject.pojo.User">
+          select * from user;
+      </select>
+  </mapper>
+  ```
+
+  UserMapper配置
+
+```java
+List<User> findAll();
+```
+
+> 使用注解来映射简单语句会使代码显得更加简洁,但对于稍微复杂一点的语句,Java注解不仅力不从心,还会让本就复杂的SQL语句更加混乱不堪。因此,如果你需要做一些很复杂的操作,最好
+> 用XML来映射语句。
+> 选择何种方式来配置映射,以及是否应该要统一映射语句定义的形式,完全取决于你和你的团队。换句话说,永远不要拘泥于一种方式,你可以很轻公地在基于注解和XML的语句映射方式间自由
+> 移植和切换。
+
+#### 配置XML映射文件的位置
+
+application.yml
+
+配置:`mybatis-mapper-locations=classpath:mapper/*.xml`
+
+ 编译后Java和resource在同一个目录下
+
+MyBatisX是一款基于IDEA快速开发Mybatis的插件，为**效率**而生
+
+### 配置文件
+
+配置文件格式
+
+SpringBoot提供了多种属性配置方式(properties,yaml,yml)
+
+#### yml配置文件
+
+- 格式
+  - 数值前必须有空格，作为分隔符
+  - 使用缩进表示层级关系，缩进时，不允许使用Tab建，只能用空格（IDEA会自动将tab转换为空格）
+  - 缩进的空格数目不重要，只要相同层级的元素左侧对齐即可
+  - \# 表示注释，从这个字符一直到行尾，都会被解释器忽略
+
+#### 定义对象/Map集合
+
+```yaml
+user:
+  name: hexiaolei
+  age: 18
+  sex: fale
+```
+
+#### 定义列表
+
+```yaml
+hobby:
+  - java
+  - C
+  - Python
+```
+
+在yml格式的配置文件中，如果配置项的值以0开头，那么需要使用''引起来，因为0在yml中会被识别为8进制数据
+
+## 后端Web开发
+
+早期开发模式:前后端混合开发(淘汰)
+
+### 目前流行的开发模式：前后端分离
+
+开发流程:
+
+需求分析->接口设计(API接口文档)->前后端并行开发(遵循流程)->测试：前端后端->前后端联调测试
+
+### 开发流程-Restful
+
+REST(REpresentational State Transfer),表述型状态转换，它是一种软件架构风格
+
+| http://localhost:8080/users/1 | GET    | 查询 id 为 1 的用户 | URL 定位资源 HTTP 动词描述操作 |
+| ----------------------------- | ------ | ------------------- | ------------------------------ |
+| http://localhost:8080/users/1 | DELETE | 删除 id 为 1 的用户 |                                |
+| http://localhost:8080/users   | POST   | 新增用户            |                                |
+| http://localhost:8080/users   | PUT    | 修改用户            | 简洁、规范、优雅               |
+
+Apifox管理接口文档，接口请求测试，mock服务
+
+### 工程搭建
+
+1. 创建SprintBoot工程,并引入web开发起步依赖，mybatis,mysql驱动,lombok
+2. 创建数据库表dept，并在application.yml中配置数据库的基本信息
+3. 准备代码结构，并引入实体类Dept及同意的响应结果封装类Result.
+
+### 遇到字段名和属性名不同解决方式
+
+因为Mybatis中，实体类名字与数据列名相同会自动封装，如果名字不相同则需要手动封装
+
+#### 通过@Results和@Result手动结果映射
+
+```java
+@Results(
+        {
+                @Result(column = "update_time",property = "updateTime"),
+                @Result(column = "create_time",property = "createTime")
+        }
+)
+```
+
+column后面是数据库字段
+
+property后面是实体类字段
+
+#### 起别名
+
+`@Select("select id, name, create_time createTime, update_time updateTime from dept order by update_time desc;")`
+
+#### 开启驼峰命名
+
+如果字段名与属性名符合驼峰命名规则，mybatis会自动通过驼峰命名规则映射
+
+```yaml
+# 驼峰命名映射
+map-underscore-to-camel-case: true
+```
+
+前端工程访问http://localhost:90是怎么访问到后端的tomcat服务器的
+
+Nginx反向代理配置
+
+```nginx
+location ^~ /api/ {
+			rewrite ^/api/(.*)$ /$1 break;
+			proxy_pass http://localhost:8080;
+        }
+```
+
+location: 用于定义匹配路径匹配的规则。
+
+^~ /api/: 表示精确匹配，即只匹配以/api/开头的路径。
+
+rewrite: 该指令用于重写匹配到的路径。  
+
+proxy_pass: 该指令用于代理转发，它将匹配到的请求转发给位于后端的指令服务器。 
+
+
+
+### 删除部门
+
+Controller接收参数
+
+```java
+@DeleteMapping("/depts")
+    public Result deleteUserById(@RequestParam(value = "id") Integer id){
+        System.out.println("根据部门删除id");
+        deptService.deleteUserById(id);
+        return Result.success();
+    }
+```
+
+请求路径/depts
+
+下面是调用deleteUserById方法删除，有返回值，就是检测是否返回成功的，不用在意
+
+@RequestParam参数后面有参数，@Requierd，意思是加了@RequestParam注解，就必须要指定value,不过也可以在后面指定@Required 为false
+
+Mapper接口
+
+```java
+void deleteUserById(@Param(value = "id") Integer id);
+```
+
+```
+<delete id="deleteUserById">
+    delete from dept where id = #{id}
+</delete>
+```
+
+### 新增部门
+
+接受JSON格式的请求参数，POST /depts {"name": "教研部"}
+
+JSON格式的参数，通常会使用到一个实体对象进行接收,。
+
+规则:JSON数据的键名与方法形参对象的属性名相同，并需要@RequestBody注解标识
+
+这个注解可以直接将一个JSON格式请求参数直接封装到一个实体类中
+
+1.**如何接收JSON格式的请求参数？** 通常通过实体对象接收，保证json格式的键名与对象属性名保持一致，并添加@RequestBody注解 
+2.**json格式的请求参数适用场景？** 主要在POST、PUT请求中，在请求体传递请求参数 
+
+### 修改部门
+
+1. 查询回显
+2. 修改数据
+
+接收请求参数(路径参数):GET /depts/1
+
+​							2
+
+路径参数:直接通过请求URL直接传递参数，使用{...}来标识该路径参数,需要使用@PathVariable注解标识
+
+实例代码
+
+```java
+@GetMapping("/depts/{id}")
+    public Result findUserById(@PathVariable(value = "id") Integer id){
+        System.out.println("根据部门id查询部门");
+        Dept dept = deptService.findUserById(id);
+        return Result.success(dept);
+    }
+```
+
+
+
+如果路径参数值和形参相同，可以省略@PathVariable后面的括号，如下
+
+```java
+@GetMapping("/depts/{id}")
+    public Result findUserById(@PathVariable Integer id){
+        System.out.println("根据部门id查询部门");
+        Dept dept = deptService.findUserById(id);
+        return Result.success(dept);
+    }
+```
+
+![image-20250508185821275](C:\Users\32394\VscodeProject\java_web\Note\picture\image-20250508185821275.png)
+
+### 修改数据
+
+ 无返回值
+
+```java
+@PutMapping("/depts")
+public Result updateUserById(@RequestBody Dept dept){
+    deptService.updateUser(dept);
+    return Result.success();
+}
+```
+
+Mapper接口
+
+```xml
+<update id="updateUserById">
+        update dept set name = #{name}, update_time = #{updateTime} where id = #{id};
+    </update>
+```
+
+
+
+
+
+由此代码可以看出/depts连续出现了好几次，可以通过在类上加入@RequestMapping("/depts")注解来解决
+
+```java
+package cloud.hexiaolei.webaiproject.controller;
+
+import cloud.hexiaolei.webaiproject.pojo.Dept;
+import cloud.hexiaolei.webaiproject.pojo.Result;
+import cloud.hexiaolei.webaiproject.service.DeptService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+public class DeptController {
+    private final DeptService deptService;
+    @Autowired
+    public DeptController(DeptService deptService){
+        this.deptService = deptService;
+    }
+
+    //@RequestMapping(value = "/depts",method = RequestMethod.GET)//指定请求方式
+//    可以直接使用@GetMapping注解
+    @GetMapping("/depts")
+    public Result getDept(){
+        List<Dept> all = deptService.findAll();
+        return Result.success(all);
+    }
+    @DeleteMapping("/depts")
+    public Result deleteUserById(@RequestParam(value = "id") Integer id){
+        System.out.println("根据部门删除id");
+        deptService.deleteUserById(id);
+        return Result.success();
+    }
+    @PostMapping("/depts")
+    public Result insertUser(@RequestBody Dept dept){
+        System.out.println("新增部门"+dept);
+        deptService.insertUser(dept);
+        return Result.success();
+    }
+
+    @GetMapping("/depts/{id}")
+    public Result findUserById(@PathVariable(value = "id") Integer id){
+        System.out.println("根据部门id查询部门");
+        Dept dept = deptService.findUserById(id);
+        return Result.success(dept);
+    }
+
+    @PutMapping("/depts")
+    public Result updateUserById(@RequestBody Dept dept){
+        deptService.updateUser(dept);
+        return Result.success();
+    }
+
+
+
+}
+
+```
+
+例如
+
+```java
+package cloud.hexiaolei.webaiproject.controller;
+
+import cloud.hexiaolei.webaiproject.pojo.Dept;
+import cloud.hexiaolei.webaiproject.pojo.Result;
+import cloud.hexiaolei.webaiproject.service.DeptService;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@RestController
+@RequestMapping("/depts")
+public class DeptController {
+    private final DeptService deptService;
+    @Autowired
+    public DeptController(DeptService deptService){
+        this.deptService = deptService;
+    }
+
+    //@RequestMapping(value = "/depts",method = RequestMethod.GET)//指定请求方式
+//    可以直接使用@GetMapping注解
+    @GetMapping
+    public Result getDept(){
+        List<Dept> all = deptService.findAll();
+        return Result.success(all);
+    }
+    @DeleteMapping
+    public Result deleteUserById(@RequestParam(value = "id") Integer id){
+        System.out.println("根据部门删除id");
+        deptService.deleteUserById(id);
+        return Result.success();
+    }
+    @PostMapping
+    public Result insertUser(@RequestBody Dept dept){
+        System.out.println("新增部门"+dept);
+        deptService.insertUser(dept);
+        return Result.success();
+    }
+
+    @GetMapping("/{id}")
+    public Result findUserById(@PathVariable(value = "id") Integer id){
+        System.out.println("根据部门id查询部门");
+        Dept dept = deptService.findUserById(id);
+        return Result.success(dept);
+    }
+
+    @PutMapping
+    public Result updateUserById(@RequestBody Dept dept){
+        deptService.updateUser(dept);
+        return Result.success();
+    }
+
+
+
+}
+
+```
+
+一个完整的请求路径
+
+是由类上的@RequestMapping的value属性值+方法上的@RequestMapping及其衍生注解的value属性值

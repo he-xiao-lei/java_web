@@ -3959,3 +3959,166 @@ public class DeptController {
 一个完整的请求路径
 
 是由类上的@RequestMapping的value属性值+方法上的@RequestMapping及其衍生注解的value属性值
+
+
+
+
+
+### 日志技术-Logback-入门程序
+
+使用平时的sout不便于维护和查看
+
+日志技术:
+
+1. JUL:java.util.logging
+   1. JavaSE平台提供的官方日志结构,也被称为JUL,配置相对简单但是不够灵活,性能较差
+2. Log4j:一个流行的日志框架，提供了灵活的配置选项，支持多种输出目标
+3. Logback:基于Log4j升级，提供更多功能和配置选项，性能优于Log4j
+
+Slf4j(Simple Logging Facade for Java):简单日志门面，提供了一套日志操作的标准接口及从抽象类，允许应用程序使用不同的底层框架
+
+#### 快速入门
+
+准备工作:引入logback依赖(SpringBoot项目中已经依赖)，配置文件logback.xml
+
+记录日志:定义日志记录对象Logger,记录日志 
+
+1. 引入依赖，配置文件logback.xml
+2. 定义日志记录对象Logger，调用方法(info/debug/)等记录日志
+
+logback.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- 控制台输出 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%logger显示日志记录器的名称， %msg表示日志消息，%n表示换行符 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 系统文件输出 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 日志文件输出的文件名, %i表示序号 -->
+			<FileNamePattern>C:/Log/tlias-%d{yyyy-MM-dd}-%i.log</FileNamePattern>
+			<!-- 最多保留的历史日志文件数量 -->
+			<MaxHistory>30</MaxHistory>
+			<!-- 最大文件大小，超过这个大小会触发滚动到新文件，默认为 10MB -->
+			<maxFileSize>10MB</maxFileSize>
+		</rollingPolicy>
+
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<!--格式化输出：%d 表示日期，%thread 表示线程名，%-5level表示级别从左显示5个字符宽度，%msg表示日志消息，%n表示换行符 -->
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 日志输出级别 -->
+	<root level="warn">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
+
+```
+
+level可以控制日志开关
+
+测试代码
+
+```java
+package cloud.hexiaolei.webaiproject;
+
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.actuate.autoconfigure.health.HealthEndpointProperties;
+
+import java.time.LocalDateTime;
+
+public class LogTest {
+    private static final Logger log = LoggerFactory.getLogger(LogTest.class);
+    @Test
+    public void testLog(){
+//        System.out.println(LocalDateTime.now() + " : 开始计算...");
+        log.debug("开始计算");
+        int sum = 0;
+        int[] nums = {1, 5, 3, 2, 1, 4, 5, 4, 6, 7, 4, 34, 2, 23};
+        for (int num : nums) {
+            sum += num;
+        }
+
+        log.info("计算结果"+sum);
+//        System.out.println("计算结果为: "+sum);
+        log.debug("结束计算");
+//        System.out.println(LocalDateTime.now() + "结束计算...");
+    }
+
+}
+
+```
+
+#### 配置文件详解
+
+- 配置文件名:logback.xml
+- 该配置文件时对logback日志框架输出的日志进行控制的，可以用来控制输出的格式，位置以及开关等
+- 常用的两种输出日志的位置，控制台，文件
+
+#### 日志级别
+
+日志级别指的是日志信息的类型，日志都会分级别，常见的日志级别如下（级别由低到高）：
+
+| 日志级别 | 说明                                                         | 记录方式                             |
+| -------- | ------------------------------------------------------------ | ------------------------------------ |
+| trace    | 追踪，记录程序运行轨迹 【使用很少】                          | log.trace("...")                     |
+| debug    | 调试，记录程序调试过程中的信息，实际应用中一般将其视为最低级别 【使用较多】 | log.debug("...")                     |
+| info     | 记录一般信息，描述程序运行的关键事件，如：网络连接、io 操作 【使用较多】 | [log.info](https://log.info/)("...") |
+| warn     | 警告信息，记录潜在有害的情况 【使用较多】                    | log.warn("...")                      |
+| error    | 错误信息 【使用较多】                                        | log.error("...")                     |
+
+可以在配置文件中，灵活的控制输出哪些类型的日志（大于等于配置日志的等级才会输出,例如<root level="info">,只有info及以上才会输出,info,warn,error）
+
+以后想要记录日志，可以直接在类上使用@Slf4j注解，会自动生成一个log对象，不用在自己创建
+
+
+
+## 多表关系
+
+####  一对多:部门和员工的关系
+
+但是有可能会出问题就是，部门删除了，但是部门所属的员工并没有被删除，被称为脏数据
+
+解决方式：外键约束
+
+可以在建表时 或 表结构创建完成后,为字段添加外键约束
+
+```sql
+-- 创建表时指定
+
+create table 表名(
+	字段 数据类型,
+    
+    [constraint] [外键名称] foreign key (外键字段名) references 主表(字段名)
+)
+```
+
+```sql
+-- 建完表以后添加外键
+alter table 表名 add [constraint] [外键名] foreign key (外键字段名) references 主表(字段名)
+```
+
+
+
+![image-20250510190404653](C:\Users\32394\VscodeProject\java_web\Note\picture\image-20250510190404653.png)
+
+外键约束的作用:多表操作中保证数据的**一致性，完整性和正确性**
+
+#### 一对一:用户 与 身份证之间的关系
+
+关系: 一对一,多用于单表拆分，将一张表的基础字段放在一张表中，其他字段凡在另一张表中，以提升操作效率
+
+实现: 在任意一方加入外键，关联另一方的主键，并且要将外键设置为unique(唯一)
+
